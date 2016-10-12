@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const plainObject = require('./fixtures/plain-object');
-const fixture = require('./fixtures/nested-objects-with-arrays');
+const fixture = require('./fixtures/nested-objects-with-arrays-unordered');
 
 const firehose = new AWS.Firehose({
   region: 'eu-west-1',
@@ -17,12 +17,13 @@ function putRecord(data) {
       // { wrap: { test: 'value' } } results in empty column
       // { wrap: { test: 'value' }, another: 'val' } works for both column
       // [ 42, { test: '1', another: '2' }, { another: '3' } ] results in two records in Analytics samples
-      Data: serializeData({
-        ticker_symbol: 'AMZN',
-        sector: 'TECHNOLOGY',
-        change: 2,
-        price: 200,
-      }),
+      Data: serializeData(data),
+      // Data: serializeData({
+      //   ticker_symbol: 'AMZN',
+      //   sector: 'TECHNOLOGY',
+      //   change: 2,
+      //   price: 200,
+      // }),
     },
   };
 
